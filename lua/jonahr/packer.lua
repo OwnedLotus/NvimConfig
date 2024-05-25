@@ -6,9 +6,9 @@ vim.cmd [[packadd packer.nvim]]
 return require('packer').startup(function(use)
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
-  use { "catppuccin/nvim", as = "catppuccin" }
-  use {
-  'nvim-telescope/telescope.nvim', tag = '0.1.6',
+  --use { "catppuccin/nvim", as = "catppuccin" }
+  use { "scottmckendry/cyberdream.nvim" }
+  use { 'nvim-telescope/telescope.nvim', tag = '0.1.6',
 -- or                            , branch = '0.1.x',
   requires = { {'nvim-lua/plenary.nvim'} }
 }
@@ -17,6 +17,19 @@ return require('packer').startup(function(use)
   use ('nvim-treesitter/playground')
   use ('mbbill/undotree')
   use ('tpope/vim-fugitive')
+  use {
+        "windwp/nvim-autopairs",
+        event = "InsertEnter",
+        config = function()
+            require("nvim-autopairs").setup {}
+        end
+        }
+  use ({
+        "stevearc/conform.nvim",
+        config = function()
+            require("conform").setup()
+        end,
+      })
   use {
   	'VonHeikemen/lsp-zero.nvim',
   	branch = 'v3.x',
