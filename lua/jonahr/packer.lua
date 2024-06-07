@@ -7,7 +7,7 @@ return require('packer').startup(function(use)
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
   --use { "catppuccin/nvim", as = "catppuccin" }
-  use { "scottmckendry/cyberdream.nvim" }
+  use { 'folke/tokyonight.nvim'}
   use { 'nvim-telescope/telescope.nvim', tag = '0.1.6',
 -- or                            , branch = '0.1.x',
   requires = { {'nvim-lua/plenary.nvim'} }
@@ -44,4 +44,5 @@ return require('packer').startup(function(use)
     		{'L3MON4D3/LuaSnip'},
   }
 }
+    use ( "David-Kunz/gen.nvim" )
 end)
