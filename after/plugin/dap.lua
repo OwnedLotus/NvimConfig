@@ -1,29 +1,49 @@
-require ('mason-nvim-dap').setup({
-    ensure_installed = {'coreclr', 'cppdbg', 'python', 'codelldb'},
-    handlers = {}, -- sets up dap in the predefined manner
-})
+--require ('mason-nvim-dap').setup({
+--ensure_installed = {'coreclr', 'cppdbg', 'python', 'codelldb'},
+--handlers = {}, -- sets up dap in the predefined manner
+--})
 
 
 local dap = require("dap")
 
---dap.adapters.coreclr = {
---  type = 'executable',
--- command = '/home/jonahr/.local/bin/netcoredbg/netcoredbg',
---    args = {'--interpreter=vscode'}    
---}
+dap.adapters.coreclr = {
+type = 'executable',
+command = '/home/jonahr/.local/bin/netcoredbg/netcoredbg',
+args = {'--interpreter=vscode'}    
+}
 
---dap.configurations.cs = {
---    {
---        type = "coreclr",
---        name = "launch - netcoredbg",
---        request = "launch",
---        program = function()
- --           return vim.fn.input('Path to dll ', vim.fn.getcwd() .. '/bin/Debug', 'file')
- --       end,
-  --  },
---}
+local function find_project_name()
+  local csproj_files = vim.fn.glob(vim.fn.getcwd() .. '/*.csproj')
+  if csproj_files == "" then
+    print("No .csproj file found in the current directory.")
+    return nil
+  else
+    local project_name = csproj_files:match("([^/]+)%.csproj$")
+    return project_name
+  end
+end
 
 
+
+dap.configurations.cs = {
+{
+type = "coreclr",
+name = "launch - netcoredbg",
+request = "launch",
+program = function()
+    local project_name = find_project_name()
+      if project_name then
+        return vim.fn.input('Path to dll: ', vim.fn.getcwd() .. '/bin/Debug/net8.0/' .. project_name .. '.dll', 'file')
+      else
+        return nil
+      end
+end,
+} 
+} 
+
+
+vim.keymap.set("n", "<leader>do", ":lua require('dapui').open()<CR>")
+vim.keymap.set("n", "<leader>dc", ":lua require('dapui').close()<CR>")
 vim.keymap.set("n", "<F5>", ":lua require('dap').continue()<CR>")
 vim.keymap.set("n", "<F10>", ":lua require('dap').step_over()<CR>")
 vim.keymap.set("n", "<F11>", ":lua require('dap').step_into()<CR>")
